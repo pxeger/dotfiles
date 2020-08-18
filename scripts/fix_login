@@ -1,0 +1,6 @@
+#!/bin/sh
+
+sed -Ei '/pam_u2f\.so/s/^(.*)$/#\1/' /etc/pam.d/system-auth
+systemctl restart sddm
+sleep 20s
+sed -Ei '/pam_u2f\.so/s/^#(.*)$/\1/' /etc/pam.d/system-auth

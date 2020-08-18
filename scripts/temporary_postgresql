@@ -1,0 +1,10 @@
+#!/bin/sh
+a="$(shuf -i2000-10000 -n1)"
+echo $a
+container_id="$(sudo docker run --rm -d -p "$a:5432" -v "$1:/data" -e PGDATA=/data -e POSTGRES_HOST_AUTH_METHOD=trust "${2:-postgres:alpine}")"
+# wait for database to init
+sleep 1
+echo "$container_id"
+# sudo docker ps -a
+sudo docker exec -it "$container_id" psql -U postgres
+
