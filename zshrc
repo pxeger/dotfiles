@@ -50,9 +50,12 @@ cat() {
 }
 
 ::pushhack() {
+    waitgroup=()
     for i in $(git remote); do
-        git push $i $@
+        git push $i $@ &
+        waitgroup+=$!
     done
+    wait $waitgroup
 }
 
 alias g=git
