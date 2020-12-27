@@ -68,6 +68,7 @@ alias a-p='ansible-playbook'
 alias a-g='ansible-galaxy'
 alias a-v='ansible-vault'
 alias pw='tr</*/ur* -dc a-z|head -c32'
+alias .=source
 
 alias r='cd ~/home/repos'
 
