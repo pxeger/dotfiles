@@ -43,6 +43,12 @@ cat() {
         fi
     done
 }
+
+::addhack() {
+    [[ $# -eq 0 ]] && set -- -u
+    git add $@
+}
+
 ::pushhack() {
     for i in $(git remote); do
         git push $i $@
@@ -50,9 +56,9 @@ cat() {
 }
 
 alias g=git
-alias a='git add .'
 alias c='git commit'
 alias push='::pushhack'
+alias a='::addhack'
 alias l='ls -lA'
 alias v=nvim
 alias e=sudoedit
