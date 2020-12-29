@@ -1,14 +1,12 @@
 call plug#begin()
-" Plug 'vim-scripts/repeatable-motions.vim'
-Plug 'pearofducks/ansible-vim'
-" Plug 'neoclide/coc.nvim', {'branch': 'release'}
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'lark-parser/vim-lark-syntax'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-repeat'
 Plug 'morhetz/gruvbox'
-Plug 'elixir-editors/vim-elixir'
+Plug 'jiangmiao/auto-pairs'
 call plug#end()
 
 " colours
@@ -20,6 +18,10 @@ autocmd vimenter * colorscheme gruvbox
 
 syntax on
 filetype plugin indent on
+
+nmap <silent>K <Plug>(lcn-hover)
+nmap <silent> gd <Plug>(lcn-definition)
+nmap <silent> <F2> <Plug>(lcn-rename)
 
 " make dollar sign a word character
 set isk+=$
@@ -73,3 +75,14 @@ nnoremap <M-S> S
 
 set tabstop=4 shiftwidth=4 expandtab softtabstop=4
 autocmd filetype yaml set tabstop=2 shiftwidth=2
+
+" trigger CoC completion with tab
+function! s:check_back_space() abort
+  let col = col('.') - 1
+  return !col || getline('.')[col - 1]  =~ '\s'
+endfunction
+
+inoremap <silent><expr> <Tab>
+      \ pumvisible() ? "\<C-n>" :
+      \ <SID>check_back_space() ? "\<Tab>" :
+      \ coc#refresh()
