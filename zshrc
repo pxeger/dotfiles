@@ -4,6 +4,8 @@ ZSH_THEME="pxeger"
 ZSH_CUSTOM="$HOME"/home/repos/dotfiles/zsh_custom
 source "$ZSH"/oh-my-zsh.sh
 
+setopt extendedglob
+
 nvm_load() {
 	[ -n "$NVM_DIR" ] && \. "$NVM_DIR"/nvm.sh || true
 }
@@ -73,8 +75,6 @@ alias a-v='ansible-vault'
 alias pw='tr</*/ur* -dc a-z|head -c32'
 alias .=source
 
-alias r='cd ~/home/repos'
-
 alias cv='nvim ~/home/repos/dotfiles/init.vim'
 alias cz='nvim ~/home/repos/dotfiles/zshrc'
 alias ct='nvim ~/home/repos/dotfiles/tmux.conf'
@@ -90,4 +90,54 @@ export GPG_TTY=$(tty)
 dir() {
     mkdir "$1"
     cd "$1"
+}
+
+# now I can use ~b to refer to ~/home/bin etc.
+hash -d b=$HOME/home/bin
+hash -d c=$HOME/home/config
+hash -d d=$HOME/home/downloads
+hash -d h=$HOME/home/haxx
+hash -d i=$HOME/home/important
+hash -d j=$HOME/home/junk
+hash -d l=$HOME/home/local
+hash -d m=$HOME/home/music
+hash -d n=$HOME/home/notes
+hash -d p=$HOME/home/pictures
+hash -d q=$HOME/home/qemu
+hash -d r=$HOME/home/repos
+hash -d t=$HOME/home/temp
+hash -d v=$HOME/home/videos
+hash -d y=$HOME/home/y_books
+hash -d z=$HOME/home/z_documents
+
+# modified from zshexpn(1) § Filename Generation § Dynamic named directories
+# now I can use ~[foo] to refer to ~/home/repos/foo
+zsh_directory_name() {
+    local -a match mbegin mend
+    case $1 in
+        d)  # turn the directory into a name
+            if [[ $2 = (#b)($HOME/home/repos/)([^/]##)* ]]; then
+                typeset -ga reply
+                reply=($match[2] $(( ${#match[1]} + ${#match[2]} )) )
+            else
+                return 1
+            fi
+            ;;
+        n)  # turn the name into a directory
+            typeset -ga reply
+            reply=($HOME/home/repos/$2)
+            ;;
+        c)  # complete names
+            local expl
+            local -a dirs
+            # :t gets the basename of the directories
+            dirs=($HOME/home/repos/*(/:t))
+            _wanted dynamic-dirs expl 'dynamic directory' compadd -S\] -a dirs
+            return
+            ;;
+        *)  # invalid
+            return 1
+            ;;
+    esac
+    return 0
 }
