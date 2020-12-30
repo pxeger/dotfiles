@@ -75,6 +75,8 @@ alias a-v='ansible-vault'
 alias pw='tr</*/ur* -dc a-z|head -c32'
 alias .=source
 
+alias copy='xclip -selection clipboard'
+
 alias cv='nvim ~/home/repos/dotfiles/init.vim'
 alias cz='nvim ~/home/repos/dotfiles/zshrc'
 alias ct='nvim ~/home/repos/dotfiles/tmux.conf'
