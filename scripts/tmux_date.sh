@@ -1,16 +1,13 @@
 #!/bin/sh
 
 # ordinal numbers
-day=$(date +%e)
-if [[ ${date%1} ]]; then
-    suffix="st"
-elif [[ ${date%2} ]]; then
-    suffix="nd"
-elif [[ ${date%3} ]]; then
-    suffix="rd"
-else
-    suffix="th"
-fi
+day=$(date +%d)
+case $day in
+    *1) suffix=st;;
+    *2) suffix=nd;;
+    *3) suffix=rd;;
+    *) suffix=th;;
+esac
 
 # final output
-date "+%A, %B %e$suffix %H:%M"
+date "+%A, %B %-d$suffix %H:%M"
