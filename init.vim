@@ -33,8 +33,12 @@ nnoremap <DEL> a<DEL><ESC>
 
 " line numbering - relative in normal mode
 set number
-autocmd InsertEnter * :set norelativenumber
-autocmd InsertLeave * :set relativenumber
+set relativenumber
+augroup linenumbering
+    autocmd!
+    autocmd InsertEnter * :set norelativenumber
+    autocmd InsertLeave * :set relativenumber
+augroup END
 
 " highlight the current line
 set cursorline
