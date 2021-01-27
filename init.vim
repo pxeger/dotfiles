@@ -77,8 +77,16 @@ nnoremap <M-X> X
 nnoremap <M-s> s
 nnoremap <M-S> S
 
+nnoremap j gj
+nnoremap k gk
+nnoremap gj j
+nnoremap gk k
+
+set formatoptions-=l
+
 set tabstop=4 shiftwidth=4 expandtab softtabstop=4
 autocmd filetype yaml set tabstop=2 shiftwidth=2
+autocmd filetype markdown set textwidth=120
 
 " trigger CoC completion with tab
 function! s:check_back_space() abort
