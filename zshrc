@@ -150,3 +150,18 @@ zsh_directory_name() {
 # foo | debug | bar
 # now you will see the output of foo
 alias debug='tee >(cat)'
+
+# ... for cd ../..
+# .... for cd ../../..
+# etc
+for i ({1..10}) {
+    s=""
+    repeat $i s+="."
+    function ..$s {
+        while [[ $0 = ...* ]] {
+            cd ..
+            0=${0:1}
+        }
+        cd ..
+    }
+}
