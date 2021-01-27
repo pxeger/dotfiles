@@ -145,3 +145,8 @@ zsh_directory_name() {
     esac
     return 0
 }
+
+# use in complex pipelines
+# foo | debug | bar
+# now you will see the output of foo
+alias debug='tee >(cat)'
