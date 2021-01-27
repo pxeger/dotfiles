@@ -5,6 +5,7 @@ ZSH_CUSTOM="$HOME"/home/repos/dotfiles/zsh_custom
 source "$ZSH"/oh-my-zsh.sh
 
 setopt extendedglob
+unsetopt banghist
 
 nvm_load() {
 	[ -n "$NVM_DIR" ] && \. "$NVM_DIR"/nvm.sh || true
