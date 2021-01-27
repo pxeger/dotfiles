@@ -108,6 +108,7 @@ hash -d n=$HOME/home/notes
 hash -d p=$HOME/home/pictures
 hash -d q=$HOME/home/qemu
 hash -d r=$HOME/home/repos
+hash -d s=$HOME/home/sshfs
 hash -d t=$HOME/home/temp
 hash -d v=$HOME/home/videos
 hash -d y=$HOME/home/y_books
