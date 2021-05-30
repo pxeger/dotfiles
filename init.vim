@@ -1,3 +1,6 @@
+" leader space
+let mapleader = " "
+
 call plug#begin()
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'lark-parser/vim-lark-syntax'
@@ -7,6 +10,9 @@ Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-repeat'
 Plug 'morhetz/gruvbox'
 Plug 'jiangmiao/auto-pairs'
+Plug 'leafgarland/typescript-vim'
+Plug 'peitalin/vim-jsx-typescript'
+Plug 'hashivim/vim-terraform'
 call plug#end()
 
 " colours
@@ -26,11 +32,6 @@ nmap <silent> <F2> <Plug>(lcn-rename)
 " make dollar sign a word character
 set isk+=$
 
-" make the enter and backspace keys work in normal mode
-nnoremap <CR> i<CR><ESC>
-nnoremap <BS> i<BS><Right><ESC>
-nnoremap <DEL> a<DEL><ESC>
-
 " line numbering - relative in normal mode
 set number
 set relativenumber
@@ -46,46 +47,102 @@ set cursorline
 " disable status line
 set laststatus=0
 
-" shift+enter opens a new line backwards
-nnoremap <S-CR> <ESC>O
+" keep cursor away from edge of screen
+set scrolloff=6
+
+nnoremap <Leader><Space> :w<CR>
+
+nnoremap <Leader><ESC> :noh<CR>
 
 " Ctrl+I and Ctrl+A to insert/append a single character
 nnoremap <C-a> a <ESC>r
 nnoremap <C-i> i <ESC>r
+" alt for doing that at the start/end of lines
+nnoremap <M-a> A <ESC>r
+nnoremap <M-i> I <ESC>r
+
+" Ctrl+O opens a new line without editing it
+nnoremap <C-o> o<ESC>k
 
 " alt+w to select inside this word
 nnoremap <M-w> viw
 
+" utilities for registers:
+" system clipboard
+nnoremap £ "+
+vnoremap £ "+
+" alternative register
+nnoremap ¬ "a
+
 " make ~ an operator, not act on a single character
 set tildeop
 
-" change Y to yank til the end of the line like D and C, not the whole line
-nnoremap Y y$
+" jump to last position when reopening a file
+if has("autocmd")
+  au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
+endif
 
-nnoremap c "_c
-nnoremap C "_C
-nnoremap x "_x
-nnoremap X "_X
-nnoremap s "_s
-nnoremap S "_S
+" git's 'intent to add' feature
+nnoremap <Leader>N :w<CR>:!git add -N %<CR>
+
+" merge line with previous
+nnoremap <Leader><BS> ^d0i<BS> <ESC>
+
+" make Y/S more consistent
+nnoremap Y y$
+nnoremap S Xi
+
+" delete right
+nnoremap <C-X> l"axh
+nnoremap <C-S> l"ash
+
+" make c/x/s use the a register rather than default
+nnoremap c "ac
+nnoremap C "aC
+nnoremap x "ax
+nnoremap X "aX
+nnoremap s "as
+nnoremap S "aXi
 nnoremap <M-d> "_d
 nnoremap <M-D> "_D
-nnoremap <M-c> c
-nnoremap <M-C> C
-nnoremap <M-x> x
-nnoremap <M-X> X
-nnoremap <M-s> s
-nnoremap <M-S> S
 
+" make jk travel through soft-wrapped lines
 nnoremap j gj
 nnoremap k gk
 nnoremap gj j
 nnoremap gk k
 
+" force myself to use hjkl
+nnoremap <Left> <nop>
+nnoremap <Right> <nop>
+nnoremap <Up> <nop>
+nnoremap <Down> <nop>
+nnoremap <C-left> <nop>
+nnoremap <C-right> <nop>
+inoremap <Left> <nop>
+inoremap <Right> <nop>
+inoremap <Up> <nop>
+inoremap <Down> <nop>
+inoremap <C-left> <nop>
+inoremap <C-right> <nop>
+onoremap <Left> <nop>
+onoremap <Right> <nop>
+onoremap <Up> <nop>
+onoremap <Down> <nop>
+onoremap <C-left> <nop>
+onoremap <C-right> <nop>
+vnoremap <Left> <nop>
+vnoremap <Right> <nop>
+vnoremap <Up> <nop>
+vnoremap <Down> <nop>
+vnoremap <C-left> <nop>
+vnoremap <C-right> <nop>
+
 set formatoptions-=l
 
 set tabstop=4 shiftwidth=4 expandtab softtabstop=4
 autocmd filetype yaml set tabstop=2 shiftwidth=2
+autocmd filetype typescriptreact set tabstop=2 shiftwidth=2
 autocmd filetype markdown set textwidth=120
 
 " trigger CoC completion with tab

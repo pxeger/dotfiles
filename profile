@@ -36,6 +36,11 @@ export ZDOTDIR="$XDG_CONFIG_HOME"/zsh
 
 export NVM_DIR="$HOME"/home/repos/nvm
 
+export PICO_SDK_PATH="$HOME"/home/repos/PICO/pico_sdk
+export PICO_EXAMPLES_PATH="$HOME"/home/repos/PICO/pico_examples
+export PICO_PLAYGROUND_PATH="$HOME"/home/repos/PICO/pico_playground
+export PICO_EXTRAS_PATH="$HOME"/home/repos/PICO/pico_extras
+
 umask 027
 
 export GPG_TTY=$(tty)

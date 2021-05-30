@@ -4,8 +4,18 @@ ZSH_THEME="pxeger"
 ZSH_CUSTOM="$HOME"/home/repos/dotfiles/zsh_custom
 source "$ZSH"/oh-my-zsh.sh
 
+# Google Cloud SDK
+# The next line updates PATH for the Google Cloud SDK.
+if [ -f '/home/pxeger/home/local/google-cloud-sdk/path.zsh.inc' ]; then . '/home/pxeger/home/local/google-cloud-sdk/path.zsh.inc'; fi
+
+# The next line enables shell command completion for gcloud.
+if [ -f '/home/pxeger/home/local/google-cloud-sdk/completion.zsh.inc' ]; then . '/home/pxeger/home/local/google-cloud-sdk/completion.zsh.inc'; fi
+
 setopt extendedglob
+setopt correct
 unsetopt banghist
+
+source ~/.profile
 
 nvm_load() {
 	[ -n "$NVM_DIR" ] && \. "$NVM_DIR"/nvm.sh || true
@@ -47,12 +57,12 @@ cat() {
     done
 }
 
-::addhack() {
+a() {
     [[ $# -eq 0 ]] && set -- -u
     git add $@
 }
 
-::pushhack() {
+gp push() {
     waitgroup=()
     for i in $(git remote); do
         git push $i $@ &
@@ -61,20 +71,50 @@ cat() {
     wait $waitgroup
 }
 
+# subshell to avoid setopt leaking
+p() (
+    setopt extendedglob
+    setopt caseglob
+    # do we need sudo? no if:
+    #  -h --help
+    #  -V --version
+    #  -Q --query
+    #  -F --files
+    #  -T --deptest
+    #  -Ss --sync --search
+    #  -Si --sync --info
+    if
+        [[ $1 = (|-*[QVFTh]*|--help|--version|--query|--files|--deptest) ]] || 
+        ( [[ $1 = (-*S*|--sync) ]] && [[ "$*" = (|*" ")(-[^ ][si][^ ]|--(info|sync)(|" "*)) ]] )
+    then
+        pacman $@
+    else
+        sudo pacman $@
+    fi
+)
+
+reload() {
+    exec zsh
+}
+
+tilde=~
+$tilde() {
+    cd ~/home
+}
+
+alias step=step-cli
+alias to='tee >/dev/null'
 alias g=git
 alias c='git commit'
-alias push='::pushhack'
-alias a='::addhack'
 alias l='ls -lA'
 alias v=nvim
 alias e=sudoedit
-alias p='sudo pacman'
 alias f='run firefox-developer-edition'
 alias a-p='ansible-playbook'
 alias a-g='ansible-galaxy'
 alias a-v='ansible-vault'
 alias pw='tr</*/ur* -dc a-z|head -c32'
-alias .=source
+alias .='builtin source'
 
 alias copy='xclip -selection clipboard'
 
@@ -91,8 +131,22 @@ dis() {
 export GPG_TTY=$(tty)
 
 dir() {
-    mkdir "$1"
-    cd "$1"
+    if [[ $# != 1 ]]
+    then
+        command dir
+    else
+        mkdir "$1"
+        cd "$1"
+    fi
+}
+
+source() {
+    if [[ $# = 0 ]]
+    then
+        cd source
+    else
+        builtin source $@
+    fi
 }
 
 # now I can use ~b to refer to ~/home/bin etc.
@@ -165,3 +219,4 @@ for i ({1..10}) {
         cd ..
     }
 }
+unset s i
