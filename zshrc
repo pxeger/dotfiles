@@ -97,10 +97,7 @@ reload() {
     exec zsh
 }
 
-tilde=~
-$tilde() {
-    cd ~/home
-}
+alias -g ~="$HOME/home"
 
 alias step=step-cli
 alias to='tee >/dev/null'
@@ -168,6 +165,10 @@ hash -d v=$HOME/home/videos
 hash -d y=$HOME/home/y_books
 hash -d z=$HOME/home/z_documents
 
+watchtests() {
+    ag -l . | entr -s 'clear; poetry run pytest -rP'
+}
+
 # modified from zshexpn(1) § Filename Generation § Dynamic named directories
 # now I can use ~[foo] to refer to ~/home/repos/foo
 zsh_directory_name() {
@@ -220,3 +221,5 @@ for i ({1..10}) {
     }
 }
 unset s i
+
+BW() bwrap --ro-bind /usr /usr --ro-bind /etc /etc --ro-bind /var /var --symlink /usr/lib /lib --symlink /usr/bin /bin --symlink /usr/lib /lib64 --tmpfs /tmp --proc /proc --dev /dev $@

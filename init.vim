@@ -92,6 +92,10 @@ nnoremap <Leader><BS> ^d0i<BS> <ESC>
 nnoremap Y y$
 nnoremap S Xi
 
+" swap 0 and ^ because 0 is more convenient
+nnoremap 0 ^
+nnoremap ^ 0
+
 " delete right
 nnoremap <C-X> l"axh
 nnoremap <C-S> l"ash
